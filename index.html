@@ -26,39 +26,21 @@
     <ul id="messages"></ul>
     <form action="">
       <h2 >Message id: <span id="idd"></span></h2>
-      <select name="g" id="g" onchange=joinchat()>  
-        <option value="">Select chat group</option>
-        <option value="A">A -qwertyuiop</option>
-        <option value="B">B -assdfghjkl</option>
-        <option value="C">C -poiuytrewq</option>
-      </select><br/><br/><br/>
       <input id="m" autocomplete="off" required /><button>Send</button>
     </form>
     <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
     <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
     <script>
       var socket = io();
-      function joinchat(){
-        if($('#g').val()!=''){socket.emit('join chat',{chatid:$('#g').val()});}
-      }
+    
       $(function () {
         $('#idd').html('_' + Math.random('ishwar chandra tiwari').toString(32).substr(2, 5))
         $('form').submit(function(){
-          if($('#m').val()!=''){
-          socket.emit('chat message', {chatid:$('#g').val(),message:$('#m').val(), from:document.getElementById('idd').innerHTML});
-          // $('#m').val('');
+          socket.emit('chat message', {message:$('#m').val(), from:document.getElementById('idd').innerHTML});
           return false;
-          }else{
-            socket.emit('chat message', {message:$('#m').val(), from:document.getElementById('idd').innerHTML});
-          // $('#m').val('');
-          return false;
-          }
         });
         socket.on('chat message', function(data){
-          // console.log('---------',data,data.message,data.from)
-          if(data.to=='public'){
-          $('#messages').append($('<li>').html("<b>"+data.from+' </b>puts message in '+data.to+ ": <span style='font-size:20px;'>&#8658;</span> "+ data.message));}
-         else{ $('#messages').append($('<li>').html("<b>"+data.from+' </b>puts message in group '+data.to+ ": <span style='font-size:20px;'>&#8658;</span> " + data.message));}
+          $('#messages').append($('<li>').html("<b>"+data.from+' </b>puts message'+": <span style='font-size:20px;'>&#8658;</span> "+ data.message));
           window.scrollTo(0, document.body.scrollHeight);
         });
       });

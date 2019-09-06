@@ -2,35 +2,63 @@
 <html>
   <head>
     <title>Socket.IO chat</title>
+    <!-- ishwardeveloper@gmail.com -->
     <style>
       * { margin: 0; padding: 0; box-sizing: border-box; }
       body { font: 13px Helvetica, Arial; }
-      form { background: #000; padding: 3px; position: fixed; bottom: 0; width: 100%; }
-      form input { border: 0; padding: 10px; width: 90%; margin-right: .5%; }
-      form button { width: 9%; background: rgb(130, 224, 255); border: none; padding: 10px; }
+      form { background: rgb(22, 21, 21); padding: 40px; position: fixed; bottom: 0; width: 100%;  }
+      h2{color: rgb(248, 241, 241); border: 0; padding: 10px; margin-right: .5%;  width: 50%; height: 50px;}
+      form input { border: 0; padding: 10px; margin-right: .5%;  width: 50%; height: 50px;
+ }
+      form select { border: 0; padding: 10px; margin-right: .5%;  width: 25%;  height: 50px;
+}
+      form button { background: rgb(130, 224, 255); border: none; padding: 10px; height: 50px;width: 100px
+}
       #messages { list-style-type: none; margin: 0; padding: 0; }
-      #messages li { padding: 5px 10px; }
-      #messages li:nth-child(odd) { background: #eee; }
+      #messages li { padding: 5px 10px;  }
+      /* #messages li:nth-child(odd) {     background: #0e0e0e;
+    color: white;
+    font-weight: 900; } */
       #messages { margin-bottom: 40px }
     </style>
   </head>
   <body>
     <ul id="messages"></ul>
     <form action="">
-      <input id="m" autocomplete="off" /><button>Send</button>
+      <h2 >Message id: <span id="idd"></span></h2>
+      <select name="g" id="g" onchange=joinchat()>  
+        <option value="">Select chat group</option>
+        <option value="A">A -qwertyuiop</option>
+        <option value="B">B -assdfghjkl</option>
+        <option value="C">C -poiuytrewq</option>
+      </select><br/><br/><br/>
+      <input id="m" autocomplete="off" required /><button>Send</button>
     </form>
     <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
     <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
     <script>
+      var socket = io();
+      function joinchat(){
+        if($('#g').val()!=''){socket.emit('join chat',{chatid:$('#g').val()});}
+      }
       $(function () {
-        var socket = io();
+        $('#idd').html('_' + Math.random('ishwar chandra tiwari').toString(32).substr(2, 5))
         $('form').submit(function(){
-          socket.emit('chat message', $('#m').val());
-          $('#m').val('');
+          if($('#m').val()!=''){
+          socket.emit('chat message', {chatid:$('#g').val(),message:$('#m').val(), from:document.getElementById('idd').innerHTML});
+          // $('#m').val('');
           return false;
+          }else{
+            socket.emit('chat message', {message:$('#m').val(), from:document.getElementById('idd').innerHTML});
+          // $('#m').val('');
+          return false;
+          }
         });
-        socket.on('chat message', function(msg){
-          $('#messages').append($('<li>').text(msg));
+        socket.on('chat message', function(data){
+          // console.log('---------',data,data.message,data.from)
+          if(data.to=='public'){
+          $('#messages').append($('<li>').html("<b>"+data.from+' </b>puts message in '+data.to+ ": <span style='font-size:20px;'>&#8658;</span> "+ data.message));}
+         else{ $('#messages').append($('<li>').html("<b>"+data.from+' </b>puts message in group '+data.to+ ": <span style='font-size:20px;'>&#8658;</span> " + data.message));}
           window.scrollTo(0, document.body.scrollHeight);
         });
       });

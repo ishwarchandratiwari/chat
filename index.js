@@ -8,8 +8,17 @@ app.get('/', function(req, res){
 });
 
 io.on('connection', function(socket){
-  socket.on('chat message', function(msg){
-    io.emit('chat message', msg);
+  socket.on('join chat', function(data){
+    // console.log('join chat===================',data,socket.id)
+    socket.join(data.chatid);
+  });
+  socket.on('chat message', function(data){
+    // console.log('---------',data)
+    if(data.chatid!=''){
+      io.to(data.chatid).emit('chat message', {message:data.message,from:data.from,to:data.chatid});
+    }else{
+      io.emit('chat message', {message:data.message,from:data.from,to:'public'});
+    }
   });
 });
 

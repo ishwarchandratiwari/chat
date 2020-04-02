@@ -32,3 +32,11 @@ docker push ishwar786/chat
 ```
 docker stop $(docker ps -a -q)
 ```
+
+
+
+
+```
+npm install 
+nodemon
+```

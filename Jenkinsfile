@@ -1,7 +1,7 @@
 pipeline {
   agent {
     node {
-      label 'linux'
+      label 'node'
     }
 
   }
@@ -41,8 +41,5 @@ npm start'''
       }
     }
 
-  }
-  environment {
-    linux = 'linux'
   }
 }

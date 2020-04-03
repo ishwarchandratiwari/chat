@@ -1,5 +1,10 @@
 pipeline {
-  agent any
+  agent {
+    node {
+      label 'nodejs'
+    }
+
+  }
   stages {
     stage('Initial Message ') {
       parallel {

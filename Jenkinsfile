@@ -27,8 +27,9 @@ pipeline {
       parallel {
         stage('Shell Script') {
           steps {
-            sh '''npm install 
-npm start'''
+            sh '''npm install'''
+                        // sh '''npm install npm start'''
+
           }
         }
 

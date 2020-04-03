@@ -18,7 +18,7 @@ docker run -p 3000:3000 -d ishwar786/chat
 
 ```
 
-### publish
+### publish..
 ```
 docker login
 docker build -t ishwar786/chat .

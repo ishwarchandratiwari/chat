@@ -42,4 +42,7 @@ npm start'''
     }
 
   }
+  environment {
+    linux = 'linux'
+  }
 }
